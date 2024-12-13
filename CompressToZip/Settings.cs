@@ -21,10 +21,10 @@ internal static class Settings {
     public static readonly ArrayList extraFiles = new() {
     };
 
-    public const string manifestWebsiteUrl = "";
+    public const string manifestWebsiteUrl = "https://github.com/HDeDeDe/LogMuteLethal";
 
     public const string manifestDescription =
-        "Silence.";
+        "Removes some of the annoying debug logs";
 
     public const string manifestDependencies = "[\n" +
                                                "\t\t\"BepInEx-BepInExPack-5.4.2100\",\n" +
