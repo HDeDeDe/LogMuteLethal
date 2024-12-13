@@ -4,7 +4,7 @@ using MonoMod.RuntimeDetour;
 using HarmonyLib;
 
 namespace HDeMods {
-    public static class Reveal {
+    internal static class Reveal {
 #if DEBUG
         private static Hook infoHook;
         private static Hook warningHook;
