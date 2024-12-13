@@ -26,6 +26,7 @@ namespace HDeMods {
 #endif
         private static ILHook networkVarDirtyHook;
         
+        // Thanks to .score for providing these 2 functions
         private static void RemoveLogFormat(this ILCursor c, string logName) => c.RemoveLog(logName, 2);
         private static void RemoveLog(this ILCursor c, string logName, int count = 1)
         {
