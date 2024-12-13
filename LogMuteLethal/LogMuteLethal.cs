@@ -1,4 +1,4 @@
-using System;
+
 using MonoMod.Cil;
 using Mono.Cecil.Cil;
 using UnityEngine;
@@ -15,7 +15,10 @@ namespace HDeMods {
         private static void RemoveLogFormat(this ILCursor c, string logName) => c.RemoveLog(logName, 2);
         private static void RemoveLog(this ILCursor c, string logName, int count = 1)
         {
-            if (!c.TryGotoNext(x => x.MatchCallOrCallvirt<Debug>(logName))) return;
+            if (!c.TryGotoNext(x => x.MatchCallOrCallvirt<Debug>(logName))) {
+                MUTE.Log.Error("Failed to silence " + c.Method.Name);
+                return;
+            }
             
             for (int i = 0; i < count; i++)
                 c.Emit(OpCodes.Pop);
