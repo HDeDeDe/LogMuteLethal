@@ -6,6 +6,15 @@ using HarmonyLib;
 using MonoMod.RuntimeDetour;
 using Unity.Netcode;
 
+/*
+ * e8 8b f0 4b 00 AudioSource
+ * e8 02 ea f6 00 LookZero
+ * e8 60 e8 4b 00 Filter
+ * e8 7a 99 62 00 NavMesh
+ * e8 d2 4a 62 00 SetDest
+ * 
+ * 66 48 90 48 90 NOP
+ */
 
 namespace HDeMods {
     public static class LogMuteLethal {
