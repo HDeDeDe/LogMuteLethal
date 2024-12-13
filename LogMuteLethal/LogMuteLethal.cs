@@ -4,25 +4,8 @@ using Mono.Cecil.Cil;
 using UnityEngine;
 using HarmonyLib;
 using MonoMod.RuntimeDetour;
+using Unity.Netcode;
 
-/*  These are the bastards that need to be killed:
- *
- *  NetworkVariableBase.SetDirty
- * 
- *  [Error  : Unity Log] RuntimeNavMeshBuilder: Source mesh %s is skipped because it does not allow read access
- *
- *  [Warning: Unity Log] BoxColliders does not support negative scale or size.
- *  The effective box size has been forced positive and is likely to give unexpected collision geometry.
- *  If you absolutely need to use negative scaling you can use the convex MeshCollider. Scene hierarchy path "%s"
- *
- *  [Warning: Unity Log] Audio source failed to initialize audio spatializer. An audio spatializer is specified in the audio project settings, but the associated plugin was not found or initialized properly. Please make sure that the selected spatializer is compatible with the target.
- *
- *  [Warning: Unity Log] Only custom filters can be played. Please add a custom filter or an audioclip to the audiosource (%s).
- *
- *  [Error  : Unity Log] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
- *
- *  [Info   : Unity Log] Look rotation viewing vector is zero
- */
 
 namespace HDeMods {
     public static class LogMuteLethal {
@@ -41,6 +24,7 @@ namespace HDeMods {
         private delegate void logDelContext(Action<object, UnityEngine.Object> orig, object message, UnityEngine.Object context);
         private static logDelContext logEvContext;
 #endif
+        private static ILHook networkVarDirtyHook;
         
         private static void RemoveLogFormat(this ILCursor c, string logName) => c.RemoveLog(logName, 2);
         private static void RemoveLog(this ILCursor c, string logName, int count = 1)
@@ -56,7 +40,9 @@ namespace HDeMods {
             IL.HUDManager.SetPlayerLevelSmoothly += HUDManager_SetPlayerLevelSmoothly;
             IL.HoarderBugAI.SetGoTowardsTargetObject += HoarderBugAI_SetGoTowardsTargetObject;
             IL.DepositItemsDesk.Update += DepositItemsDesk_Update;
-            
+
+            networkVarDirtyHook = new ILHook(AccessTools.Method(typeof(NetworkVariableBase),
+                nameof(NetworkVariableBase.SetDirty)), NetworkVariableBase_SetDirty);
 #if DEBUG
             logEv += RevealThyself;
             infoHook = new Hook(AccessTools.Method(typeof(Debug), nameof(Debug.Log), 
@@ -105,6 +91,12 @@ namespace HDeMods {
             
             c.RemoveLog(nameof(Debug.Log));
             c.RemoveLog(nameof(Debug.Log));
+        }
+
+        private static void NetworkVariableBase_SetDirty(ILContext il) {
+            ILCursor c = new ILCursor(il);
+            
+            c.RemoveLog(nameof(Debug.LogWarning));
         }
     }
 }

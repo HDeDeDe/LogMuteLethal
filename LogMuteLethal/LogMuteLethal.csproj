@@ -26,6 +26,9 @@
       <Reference Include="MMHOOK_Assembly-CSharp">
         <HintPath>..\Resources\lib\MMHOOK_Assembly-CSharp.dll</HintPath>
       </Reference>
+        <Reference Include="Unity.Netcode.Runtime">
+            <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Unity.Netcode.Runtime.dll</HintPath>
+        </Reference>
         <Reference Include="Assembly-CSharp" HintPath="C:\Program Files (x86)\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Assembly-CSharp.dll" Publicize="true" />
     </ItemGroup>
 
