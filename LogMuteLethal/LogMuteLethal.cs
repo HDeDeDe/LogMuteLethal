@@ -1,4 +1,5 @@
 
+using System;
 using MonoMod.Cil;
 using Mono.Cecil.Cil;
 using UnityEngine;
@@ -19,6 +20,7 @@ using Unity.Netcode;
 namespace HDeMods {
     public static class LogMuteLethal {
         private static ILHook networkVarDirtyHook;
+        private static ILHook oneShotHook;
         
         // Thanks to .score for providing these 2 functions
         private static void RemoveLogFormat(this ILCursor c, string logName) => c.RemoveLog(logName, 2);
@@ -45,6 +47,8 @@ namespace HDeMods {
 
             networkVarDirtyHook = new ILHook(AccessTools.Method(typeof(NetworkVariableBase),
                 nameof(NetworkVariableBase.SetDirty)), NetworkVariableBase_SetDirty);
+            oneShotHook = new ILHook(AccessTools.Method(typeof(AudioSource), nameof(AudioSource.PlayOneShot), 
+                    new Type[] {typeof(AudioClip), typeof(float)}), AudioSource_PlayOneShot);
             Reveal.Startup();
         }
         
@@ -69,6 +73,12 @@ namespace HDeMods {
         }
 
         private static void NetworkVariableBase_SetDirty(ILContext il) {
+            ILCursor c = new ILCursor(il);
+            
+            c.RemoveLog(nameof(Debug.LogWarning));
+        }
+        
+        private static void AudioSource_PlayOneShot(ILContext il) {
             ILCursor c = new ILCursor(il);
             
             c.RemoveLog(nameof(Debug.LogWarning));
