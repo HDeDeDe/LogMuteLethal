@@ -23,6 +23,10 @@ namespace HDeMods {
             for (int i = 0; i < count; i++)
                 c.Emit(OpCodes.Pop);
             c.Remove();
+            
+#if DEBUG
+            MUTE.Log.Warning("Silenced " + c.Method.Name);
+#endif
         }
         
         internal static void Startup() {
