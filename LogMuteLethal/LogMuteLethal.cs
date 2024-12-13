@@ -7,11 +7,11 @@ using MonoMod.RuntimeDetour;
 using Unity.Netcode;
 
 /*
- * e8 8b f0 4b 00 AudioSource
- * e8 02 ea f6 00 LookZero
- * e8 60 e8 4b 00 Filter
- * e8 7a 99 62 00 NavMesh
- * e8 d2 4a 62 00 SetDest
+ * e8 8b f0 4b 00 AudioSource   -0x00B9EE00
+ * e8 02 ea f6 00 LookZero      -0x000EF489
+ * e8 60 e8 4b 00 Filter        -0x00B9F62B
+ * e8 7a 99 62 00 NavMesh       -0x00A34511
+ * e8 d2 4a 62 00 SetDest       -0x00A393B9
  * 
  * 66 48 90 48 90 NOP
  */
