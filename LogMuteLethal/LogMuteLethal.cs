@@ -52,7 +52,7 @@ namespace HDeMods {
                 nameof(NetworkVariableBase.SetDirty)), NetworkVariableBase_SetDirty);
             oneShotHook = new ILHook(AccessTools.Method(typeof(AudioSource), nameof(AudioSource.PlayOneShot), 
                     new Type[] {typeof(AudioClip), typeof(float)}), AudioSource_PlayOneShot);
-            Reveal.Startup();
+            LogMuteReveal.Startup();
         }
         
         private static void HUDManager_SetPlayerLevelSmoothly(ILContext il) {
