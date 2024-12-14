@@ -24,12 +24,12 @@ namespace HDeMods {
         private static ILHook playerLevelHook;
         
         // Thanks to .score for providing these 2 functions
-        private static void RemoveLogFormat(this ILCursor c, string logName) => c.RemoveLog(logName, 2);
-        private static void RemoveLog(this ILCursor c, string logName, int count = 1)
+        private static bool RemoveLogFormat(this ILCursor c, string logName) => c.RemoveLog(logName, 2);
+        private static bool RemoveLog(this ILCursor c, string logName, int count = 1)
         {
             if (!c.TryGotoNext(x => x.MatchCallOrCallvirt<Debug>(logName))) {
                 MUTE.Log.Error("Failed to silence " + c.Method.Name);
-                return;
+                return false;
             }
             
             for (int i = 0; i < count; i++)
@@ -39,6 +39,7 @@ namespace HDeMods {
 #if DEBUG
             MUTE.Log.Warning("Silenced " + c.Method.Name);
 #endif
+            return true;
         }
         
         internal static void Startup() {
