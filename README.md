@@ -4,3 +4,5 @@ If anyone can find where inside UnityPlayer.dll the BoxCollider warning is emitt
 
 ## Creds
 This mod is based on the one .score created for [Risk of Rain 2](https://thunderstore.io/package/score/LogMute/) and borrows code from it.
+
+Thank you to iDeathHD for pointing me in [the right direction](https://github.com/risk-of-thunder/RoR2BepInExPack/blob/dlc2/RoR2BepInExPack/UnityEngineHooks/FrankenMonoPrintStackOverflowException.cs) on how to do byte patching.
