@@ -31,26 +31,30 @@ namespace HDeMods {
                 .Single(m => m.ModuleName == "UnityPlayer.dll")
                 .BaseAddress;
             
-            if (!NopLocation(currentProc, baseAddress, 0xB9EE00, 0xe8_8b_f0_4b_00)) 
+            if (!NopLocation(currentProc, baseAddress, 0xB9EE00, 0xe8_8b_f0_4b_00_48_8b_9c)) 
                 MUTE.Log.Error("Failed to silence Audio Source!");
-            if (!NopLocation(currentProc, baseAddress, 0x0EF489, 0xe8_02_ea_f6_00)) 
+            if (!NopLocation(currentProc, baseAddress, 0x0EF489, 0xe8_02_ea_f6_00_0f_28_bc)) 
                 MUTE.Log.Error("Failed to silence Look Zero!");
-            if (!NopLocation(currentProc, baseAddress, 0xB9F62B, 0xe8_60_e8_4b_00)) 
+            if (!NopLocation(currentProc, baseAddress, 0xB9F62B, 0xe8_60_e8_4b_00_40_38_7d)) 
                 MUTE.Log.Error("Failed to silence Filter!");
-            if (!NopLocation(currentProc, baseAddress, 0xA34511, 0xe8_7a_99_62_00)) 
+            if (!NopLocation(currentProc, baseAddress, 0xA34511, 0xe8_7a_99_62_00_80_bd_18)) 
                 MUTE.Log.Error("Failed to silence NavMesh!");
-            if (!NopLocation(currentProc, baseAddress, 0xA393B9, 0xe8_d2_4a_62_00)) 
+            if (!NopLocation(currentProc, baseAddress, 0xA393B9, 0xe8_d2_4a_62_00_32_c0_48)) 
                 MUTE.Log.Error("Failed to silence SetDestination!");
         }
         
-        private static bool NopLocation(Process currentProc, IntPtr baseAddress, int offset, ulong instrToReplace) {
-            byte* logCall = *(byte**)(baseAddress + offset);
-            MUTE.Log.Debug(instrToReplace.ToString("X"));
-            MUTE.Log.Debug(offset.ToString("X"));
-            MUTE.Log.Debug(((IntPtr)logCall).ToString("X"));
+        private static bool NopLocation(Process currentProc, IntPtr baseAddress, nint offset, ulong instrToReplace) {
+            ulong mask = 0xff_ff_ff_ff_ff_00_00_00;
             
-            if (*(ulong*)logCall != instrToReplace) return false;
-            *(ulong*)logCall = 0x6648904890;
+            byte* logCall = (byte*)(baseAddress + offset);
+            
+            if (*(ulong*)logCall != instrToReplace) {
+                MUTE.Log.Error("No Match. " + (*(long*)logCall).ToString("X") + " " + ((long)instrToReplace).ToString("X"));
+                return false;
+            }
+            mask ^= instrToReplace;
+            
+            *(ulong*)logCall = 0x66_48_90_48_90_00_00_00 + mask;
             
             if (FlushInstructionCache(currentProc.Handle, logCall, 5) == 0) return false;
             return true;
