@@ -2,6 +2,8 @@ Mutes some logs that are constantly spammed but should be entirely ignored. By d
 
 If anyone can find where inside UnityPlayer.dll the BoxCollider warning is emitted I will give you a cookie.
 
+If there are any other log messages you think should be muted, feel free to either ping me on the Lethal Company Modding Discord or leave an issue on the [github](https://github.com/HDeDeDe/LogMuteLethal).
+
 ## Creds
 This mod is based on the one .score created for [Risk of Rain 2](https://thunderstore.io/package/score/LogMute/) and borrows code from it.
 
