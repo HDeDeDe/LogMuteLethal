@@ -21,9 +21,7 @@ namespace HDeMods {
                 c.Emit(OpCodes.Pop);
             c.Remove();
             
-#if DEBUG
-            MUTE.Log.Warning("Silenced " + c.Method.Name);
-#endif
+            MUTE.Log.Info("Silenced " + c.Method.Name);
             return true;
         }
         
