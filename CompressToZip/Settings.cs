@@ -27,7 +27,6 @@ internal static class Settings {
         "Removes some of the annoying debug logs";
 
     public const string manifestDependencies = "[\n" +
-                                               "\t\t\"BepInEx-BepInExPack-5.4.2100\",\n" +
-                                               "\t\t\"Evaisa-HookGenPatcher-0.0.5\"\n" +
+                                               "\t\t\"BepInEx-BepInExPack-5.4.2100\"\n" +
                                                "\t]";
 }

@@ -16,6 +16,5 @@
             <Link>CHANGELOG.md</Link>
         </Content>
         <Content Include="icon.png" />
-        <Content Include="lib\MMHOOK_Assembly-CSharp.dll" />
     </ItemGroup>
 </Project>

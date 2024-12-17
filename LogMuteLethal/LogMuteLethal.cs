@@ -8,10 +8,6 @@ using Unity.Netcode;
 
 namespace HDeMods {
     internal static class LogMuteLethal {
-        private static ILHook networkVarDirtyHook;
-        private static ILHook oneShotHook;
-        private static ILHook playerLevelHook;
-        
         // Thanks to .score for providing these 2 functions
         private static bool RemoveLogFormat(this ILCursor c, string logName) => c.RemoveLog(logName, 2);
         private static bool RemoveLog(this ILCursor c, string logName, int count = 1)
@@ -32,14 +28,16 @@ namespace HDeMods {
         }
         
         internal static void Startup() {
-            IL.HoarderBugAI.SetGoTowardsTargetObject += HoarderBugAI_SetGoTowardsTargetObject;
-            IL.DepositItemsDesk.Update += DepositItemsDesk_Update;
-            playerLevelHook = new ILHook(AccessTools.EnumeratorMoveNext(AccessTools.Method(typeof(HUDManager),
+            ILHook yipeeBugHook = new ILHook(AccessTools.Method(typeof(HoarderBugAI),
+                nameof(HoarderBugAI.SetGoTowardsTargetObject)), HoarderBugAI_SetGoTowardsTargetObject);
+            ILHook depositItemsHook = new ILHook(AccessTools.Method(typeof(DepositItemsDesk),
+                nameof(DepositItemsDesk.Update)), DepositItemsDesk_Update);
+            ILHook playerLevelHook = new ILHook(AccessTools.EnumeratorMoveNext(AccessTools.Method(typeof(HUDManager),
                 nameof(HUDManager.SetPlayerLevelSmoothly))), HUDManager_SetPlayerLevelSmoothly);
             
-            networkVarDirtyHook = new ILHook(AccessTools.Method(typeof(NetworkVariableBase),
+            ILHook networkVarDirtyHook = new ILHook(AccessTools.Method(typeof(NetworkVariableBase),
                 nameof(NetworkVariableBase.SetDirty)), NetworkVariableBase_SetDirty);
-            oneShotHook = new ILHook(AccessTools.Method(typeof(AudioSource), nameof(AudioSource.PlayOneShot), 
+            ILHook oneShotHook = new ILHook(AccessTools.Method(typeof(AudioSource), nameof(AudioSource.PlayOneShot), 
                     new Type[] {typeof(AudioClip), typeof(float)}), AudioSource_PlayOneShot);
 
             LogMuteUnity.Startup();
