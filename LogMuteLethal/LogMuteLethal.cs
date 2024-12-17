@@ -24,6 +24,20 @@ namespace HDeMods {
             MUTE.Log.Info("Silenced " + c.Method.Name);
             return true;
         }
+        private static bool RemoveMultipleLogs(this ILCursor c, string logName, int count)
+        {
+            for (int i = 0; i < count; i++) {
+                if (!c.TryGotoNext(x => x.MatchCallOrCallvirt<Debug>(logName))) {
+                    MUTE.Log.Error("Failed to silence " + c.Method.Name);
+                    return false;
+                }
+                c.Emit(OpCodes.Pop);
+                c.Remove();
+            }
+            
+            MUTE.Log.Info("Silenced " + c.Method.Name);
+            return true;
+        }
         
         internal static void Startup() {
             ILHook yipeeBugHook = new ILHook(AccessTools.Method(typeof(HoarderBugAI),
@@ -51,15 +65,13 @@ namespace HDeMods {
         private static void HoarderBugAI_SetGoTowardsTargetObject(ILContext il) {
             ILCursor c = new ILCursor(il);
             
-            c.RemoveLog(nameof(Debug.Log));
-            c.RemoveLog(nameof(Debug.Log));
+            c.RemoveMultipleLogs(nameof(Debug.Log), 2);
         }
         
         private static void DepositItemsDesk_Update(ILContext il) {
             ILCursor c = new ILCursor(il);
             
-            c.RemoveLog(nameof(Debug.Log));
-            c.RemoveLog(nameof(Debug.Log));
+            c.RemoveMultipleLogs(nameof(Debug.Log), 2);
         }
 
         private static void NetworkVariableBase_SetDirty(ILContext il) {
